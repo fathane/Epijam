@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kasner</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        header {
+            background: #333;
+            color: #fff;
+            padding: 20px 0;
+        }
+
+        header h1 {
+            float: left;
+        }
+
+        nav ul {
+            float: right;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-left: 20px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .hero {
+            background: #007bff;
+            color: #fff;
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .articles {
+            padding: 40px 0;
+        }
+
+        .articles h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .articles ul {
+            list-style: none;
+        }
+
+        .articles ul li {
+            background: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .articles ul li h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        footer {
+            background: #333;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #0056b3;
+        }
+
+        .random-images {
+            display: none;
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        .image-gallery img {
+            max-width: 200px;
+            margin: 10px;
+        }
+    </style>
+    <script async src="https://cse.google.com/cse.js?cx=23a0372f23f294c40"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>MY SEARCH</h1>
+            <nav>
+                <ul>
+                    <li><a href="#" onclick="showRandomImages()">Accueil</a></li>
+                    <li><a href="#">Créer un article</a></li>
+                </ul>
+            </nav>
+            <div class="gcse-search"></div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h2>Bienvenue sur Kasner</h2>
+                <p> rechercher un contenu en ligne </p>
+            </div>
+        </section>
+
+        <section class="articles">
+   
+        </section>
+
+        <section class="random-images" id="random-images-section">
+            <h2>Images aléatoires</h2>
+            <div class="image-gallery">
+            </div>
+            <button onclick="loadRandomImages()">Afficher de nouvelles images</button>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 MY SEARCH. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <script>
+        window.onload = function() {
+            loadRandomImages();
+        }
+
+        function showRandomImages() {
+            var randomImagesSection = document.getElementById('random-images-section');
+            randomImagesSection.style.display = 'block';
+            loadRandomImages();
+        }
+
+        function loadRandomImages() {
+            var query = 'random';
+
+            var url = 'https://www.googleapis.com/customsearch/v1?key=YOUR_API_KEY&cx=YOUR_SEARCH_ENGINE_ID&searchType=image&q=' + query;
+            
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', url, true);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    var images = response.items;
+                    var imageGallery = document.querySelector('.image-gallery');
+    
+                    imageGallery.innerHTML = '';
+
+                    images.forEach(function(image) {
+                        var imgElement = document.createElement('img');
+                        imgElement.src = image.link;
+                        imgElement.alt = image.title;
+                        imageGallery.appendChild(imgElement);
+                    });
+                } else {
+                    console.error('La requête a échoué. Statut de la réponse:', xhr.status);
+                }
+            };
+            xhr.send();
+        }
+    </script>
+</body>
+</html>
